@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AjudaAí - Encontre profissionais pertinho de você</title>
+    <style> 
+        /* Variáveis de Cores */
+        :root {
+            --primary-green: #008060; /* Verde escuro moderno */
+            --light-green: #e6f5f0; /* Verde bem claro para fundos */
+            --accent-green: #00cc99; /* Verde vibrante para destaques */
+            --white: #ffffff;
+            --text-dark: #333333;
+            --text-light: #666666;
+        }
+
+        /* Reset Básico */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            color: var(--text-dark);
+            background-color: var(--white);
+            line-height: 1.6;
+        }
+
+        /* Estilos de Botões */
+        .btn {
+            display: inline-block;
+            padding: 10px 24px;
+            border-radius: 50px; /* Bordas arredondadas */
+            text-decoration: none;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid var(--primary-green);
+        }
+
+        .btn-solid {
+            background-color: var(--primary-green);
+            color: var(--white);
+        }
+
+        .btn-solid:hover {
+            background-color: var(--accent-green);
+            border-color: var(--accent-green);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary-green);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary-green);
+            color: var(--white);
+        }
+
+        /* Cabeçalho (Header) */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            background-color: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo img {
+            height: 58px; /* Defina a altura fixa que desejar aqui */
+            width: auto;  /* Mantém a proporção da imagem */
+            display: block;
+        
+        }
+        .logo{
+            display: flex;
+            color: var(--primary-green);
+            font-family: fantasy;
+        }
+        .Nome_Startup {
+            font-family: fantasy;
+            font-size: 32px; /* Define o tamanho da letra em vez do tamanho da caixa */
+            color: var(--primary-green); /* Mantém a identidade visual verde */
+            text-decoration: none; /* Remove o sublinhado caso seja um link */
+            font-weight: bold;
+        } 
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--primary-green);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* Seção Principal (Hero) */
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 5rem 5%;
+            background-color: var(--light-green);
+        }
+
+        .hero-text {
+            flex: 1;
+            max-width: 50%;
+        }
+
+        .hero-text h1 {
+            font-size: 3rem;
+            color: var(--primary-green);
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero-text p {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .hero-visual {
+            flex: 1;
+            display: flex;
+            justify-content: flex-end;
+        }
+        /*Mapa da cidae*/
+        .placeholder-map { 
+            width: 100%;
+            max-width: 1000px;
+            height: 400px;
+            border-radius: 40px;
+            background-color: #d1e8e2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-green);
+            font-weight: bold;
+            overflow: hidden;
+            border: black 10px;
+            border-style: dotted;
+            border-width: 2px;
+            
+        }
+
+        /* Top Trabalhadores */
+        .top-workers {
+            padding: 5rem 5%;
+            text-align: center;
+            background-color: var(--white);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            color: var(--primary-green);
+            margin-bottom: 3rem;
+        }
+
+        .podium {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .worker-card {
+            background-color: var(--light-green);
+            padding: 2rem 1.5rem;
+            border-radius: 20px;
+            width: 220px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            position: relative;
+            transition: transform 0.3s;
+        }
+
+        .worker-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .worker-card.first-place {
+            background-color: var(--primary-green);
+            color: var(--white);
+            transform: scale(1.1);
+            z-index: 2;
+        }
+
+        .worker-card.first-place:hover {
+            transform: scale(1.1) translateY(-5px);
+        }
+
+        .worker-card.first-place p {
+            color: #e0e0e0;
+        }
+
+        .medal {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .worker-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .worker-card p {
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        /* Categorias */
+        .categories {
+            padding: 5rem 5%;
+            text-align: center;
+            background-color: var(--light-green);
+        }
+
+        .categories-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .category-tag {
+            background-color: var(--white);
+            color: var(--primary-green);
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: bold;
+            border: 2px solid transparent;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .category-tag:hover {
+            border-color: var(--primary-green);
+            transform: scale(1.05);
+        }
+
+        /* Rodapé (Footer) */
+        footer {
+            background-color: var(--primary-green);
+            color: var(--white);
+            text-align: center;
+            padding: 2rem 5%;
+        }
+
+        /* Responsividade (Mobile) */
+        @media (max-width: 900px) {
+            header {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero {
+                flex-direction: column;
+                text-align: center;
+                gap: 3rem;
+            }
+
+            .hero-text {
+                max-width: 100%;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .podium {
+                flex-direction: column;
+                align-items: center;
+                gap: 2rem;
+            }
+
+            .worker-card.first-place {
+                transform: scale(1);
+                order: -1; /* Coloca o 1º lugar no topo no celular */
+            }
+            
+            .worker-card.first-place:hover {
+                transform: translateY(-5px);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        
+        <div class="logo">
+            <img src="image-removebg-preview.png" alt="Logo AjudaAí">
+            <h1>Ajuda<h1 class="textss">AI</h1></h1>
+        </div>
+        
+        <nav>
+            <ul>
+                <li><a href="#">Início</a></li>
+                <li><a href="sobre.html">Quem somos?</a></li>
+                <li><a href="#">Contato</a></li>
+            </ul>
+        </nav>
+        <div class="header-actions">
+            <a href="cadastro.html" class="btn btn-outline">Cadastrar Trabalhador</a>
+            <a href="login.html" class="btn btn-solid">Entrar</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-text">
+                <h1>Precisando de um profissional?</h1>
+                <p>Encontre ajudantes diários pertinho de você.</p>
+                <div class="hero-buttons">
+                    <a href="#" class="btn btn-solid">Preciso de ajuda agora</a>
+                    <a href="#" class="btn btn-outline">Buscar Trabalhadores</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="placeholder-map">
+                    <iframe 
+    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6674.591230056024!2d-38.62392800934293!3d-5.892707554105633!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x7bb58c51eff9361%3A0x3972549b392fb28f!2sJaguaribe%2C%20CE%2C%2063475-000!5e0!3m2!1spt-BR!2sbr!4v1774358316935!5m2!1spt-BR!2sbr" 
+    width=100% 
+    height=100% 
+    style="border: 0; border-radius: 40px;" 
+    allowfullscreen="" 
+    loading="lazy" 
+    referrerpolicy="no-referrer-when-downgrade">
+    
+</iframe>
+                </div>
+            </div>
+        </section>
+
+        <section class="top-workers">
+            <h2 class="section-title">Top Trabalhadores do Mês</h2>
+            <div class="podium">
+                
+                <div class="worker-card">
+                    <div class="medal">🥈</div>
+                    <h3>2º Ana</h3>
+                    <p>Diarista</p>
+                </div>
+
+                <div class="worker-card first-place">
+                    <div class="medal">🥇</div>
+                    <h3>1º Carlos</h3>
+                    <p>Pedreiro</p>
+                </div>
+
+                <div class="worker-card">
+                    <div class="medal">🥉</div>
+                    <h3>3º João</h3>
+                    <p>Eletricista</p>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="categories">
+            <h2 class="section-title">Encontre trabalhadores por categoria</h2>
+            <div class="categories-grid">
+                <div class="category-tag">Babá</div>
+                <div class="category-tag">Diarista</div>
+                <div class="category-tag">Pedreiro</div>
+                <div class="category-tag">Eletricista</div>
+                <div class="category-tag">Encanador</div>
+                <div class="category-tag">Montador</div>
+                <div class="category-tag">Outros</div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 AjudaAí - Todos os direitos reservados</p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - AjudaAí</title>
+    <style>
+        :root {
+            --primary-green: #008060;
+            --light-green: #e6f5f0;
+            --accent-green: #00cc99;
+            --white: #ffffff;
+            --text-dark: #333333;
+            --text-light: #666666;
+            --error-red: #ff4d4d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background-color: var(--light-green);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Card de Cadastro */
+        .auth-card {
+            background: var(--white);
+            width: 100%;
+            max-width: 450px;
+            padding: 2.5rem;
+            border-radius: 24px;
+            box-shadow: 0 10px 25px rgba(0, 128, 96, 0.1);
+            text-align: center;
+        }
+
+        .logo-small {
+            color: var(--primary-green);
+            font-family: fantasy;
+            font-size: 24px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .auth-card h2 {
+            color: var(--primary-green);
+            margin-bottom: 0.5rem;
+            font-size: 1.8rem;
+        }
+
+        .auth-card p {
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+
+        /* Formulário Indutivo */
+        .form-group {
+            text-align: left;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 0.9rem;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #eee;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: var(--primary-green);
+            background-color: #f9fffb;
+        }
+
+        /* Destaque para facilitar a escolha */
+        .type-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 2rem;
+        }
+
+        .type-option {
+            border: 2px solid #eee;
+            padding: 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        .type-option.active {
+            border-color: var(--primary-green);
+            background-color: var(--light-green);
+            color: var(--primary-green);
+        }
+
+        /* Botão de Ação */
+        .btn-submit {
+            width: 100%;
+            padding: 16px;
+            background-color: var(--primary-green);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.3s;
+        }
+
+        .btn-submit:hover {
+            background-color: var(--accent-green);
+            transform: translateY(-2px);
+        }
+
+        .footer-links {
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .footer-links a {
+            color: var(--primary-green);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Feedback visual simples */
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .step {
+            width: 30px;
+            height: 4px;
+            background: #eee;
+            border-radius: 2px;
+        }
+
+        .step.active {
+            background: var(--primary-green);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="auth-card">
+        <div class="logo-small">
+            <span>Ajuda</span><strong>AI</strong>
+        </div>
+
+        <div class="step-indicator">
+            <div class="step active"></div>
+            <div class="step"></div>
+        </div>
+
+        <h2>Crie sua conta</h2>
+        <p>Preencha os dados abaixo para começar.</p>
+
+        <form onsubmit="event.preventDefault(); window.location.href='login.html';">
+            <div class="form-group">
+                <label>Como quer usar o AjudaAí?</label>
+                <div class="type-selector">
+                    <div class="type-option active" onclick="selectType(this)">Quero Ajudar</div>
+                    <div class="type-option" onclick="selectType(this)">Quero Contratar</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="name">Seu Nome Completo</label>
+                <input type="text" id="name" placeholder="Ex: Maria Silva" required>
+            </div>
+
+            <div class="form-group">
+                <label for="whatsapp">Seu WhatsApp</label>
+                <input type="tel" id="whatsapp" placeholder="(00) 00000-0000" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Crie uma Senha</label>
+                <input type="password" id="password" placeholder="Mínimo 6 caracteres" required>
+            </div>
+
+            <button type="submit" class="btn-submit">Finalizar Cadastro</button>
+        </form>
+
+        <div class="footer-links">
+            Já tem uma conta? <a href="login.html">Entrar agora</a>
+        </div>
+    </div>
+
+    <script>
+        function selectType(element) {
+            // Remove active de todos
+            document.querySelectorAll('.type-option').forEach(opt => {
+                opt.classList.remove('active');
+            });
+            // Adiciona ao clicado
+            element.classList.add('active');
+        }
+    </script>
+</body>
+</html>

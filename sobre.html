@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quem Somos - AjudaAí</title>
+    <style>
+        :root {
+            --primary-green: #008060;
+            --light-green: #e6f5f0;
+            --accent-green: #00cc99;
+            --white: #ffffff;
+            --text-dark: #333333;
+            --text-light: #666666;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background-color: var(--white);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* Cabeçalho (Header) */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            background-color: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo img {
+            height: 58px; /* Defina a altura fixa que desejar aqui */
+            width: auto;  /* Mantém a proporção da imagem */
+            display: block;
+        
+        }
+        .logo{
+            display: flex;
+            color: var(--primary-green);
+            font-family: fantasy;
+        }
+
+        .Nome_Startup {
+            font-family: fantasy;
+            font-size: 30px; /* Define o tamanho da letra em vez do tamanho da caixa */
+            color: var(--primary-green); /* Mantém a identidade visual verde */
+            text-decoration: none; /* Remove o sublinhado caso seja um link */
+            font-weight: bold;
+        }
+
+        /* Seção Sobre */
+        .about-hero {
+            background-color: var(--light-green);
+            padding: 4rem 5%;
+            text-align: center;
+        }
+
+        .about-hero h1 {
+            color: var(--primary-green);
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .about-hero p {
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 1.2rem;
+            color: var(--text-light);
+        }
+
+        /* Cards de Missão (Inclusão e Cidadania) */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 4rem 5%;
+        }
+
+        .info-card {
+            padding: 2rem;
+            border-radius: 20px;
+            background: #fff;
+            border: 2px solid var(--light-green);
+            transition: transform 0.3s;
+        }
+
+        .info-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent-green);
+        }
+
+        .info-card h3 {
+            color: var(--primary-green);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Como Funciona - Passo a Passo */
+        .how-it-works {
+            padding: 4rem 5%;
+            background-color: #f9f9f9;
+        }
+
+        .steps {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .step-item {
+            text-align: center;
+            max-width: 250px;
+        }
+
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background-color: var(--primary-green);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 auto 1.5rem;
+        }
+
+        /* Rodapé de Ação */
+        .cta-section {
+            padding: 4rem 5%;
+            text-align: center;
+            background-color: var(--primary-green);
+            color: white;
+        }
+
+        .btn-white {
+            display: inline-block;
+            padding: 15px 40px;
+            background: white;
+            color: var(--primary-green);
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            margin-top: 2rem;
+            transition: background 0.3s;
+        }
+
+        .btn-white:hover {
+            background: var(--light-green);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <img src="image-removebg-preview.png" alt="Logo AjudaAí">
+            <h1>Ajuda<h1 class="textss">AI</h1></h1>
+        </div>
+        <nav>
+            <a href="index.html" style="text-decoration: none; color: var(--primary-green); font-weight: 600;">Voltar ao Início</a>
+        </nav>
+    </header>
+
+    <section class="about-hero">
+        <h1>Conhecimento a serviço da vida coletiva</h1>
+        <p>O <strong>AjudaAí</strong> nasceu para dar visibilidade aos trabalhadores e facilitar o dia a dia de quem precisa de ajuda rápida e segura. Somos mais que um app: somos uma ferramenta de cidadania.</p>
+    </section>
+
+    <main>
+        <div class="info-grid">
+            <div class="info-card">
+                <h3>🤝 Cidadania na prática</h3>
+                <p>Acreditamos que a tecnologia deve ser para todos. Democratizamos o acesso ao trabalho para quem é autônomo, combatendo a invisibilidade de profissionais incríveis.</p>
+            </div>
+            <div class="info-card">
+                <h3>🏘️ Confiança na Comunidade</h3>
+                <p>Fortalecemos a convivência democrática criando uma rede de confiança onde vizinhos ajudam vizinhos com segurança e valorização do saber local.</p>
+            </div>
+            <div class="info-card">
+                <h3>💡 Ciência Social</h3>
+                <p>Usamos a inovação para reduzir desigualdades, colocando ferramentas digitais avançadas nas mãos de quem faz o trabalho manual.</p>
+            </div>
+        </div>
+
+        <section class="how-it-works">
+            <h2 style="text-align: center; color: var(--primary-green);">Como funciona?</h2>
+            <div class="steps">
+                <div class="step-item">
+                    <div class="step-number">1</div>
+                    <h4>Peça Ajuda</h4>
+                    <p>Diga qual profissional você precisa (pedreiro, diarista, eletricista).</p>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">2</div>
+                    <h4>Encontre Perto</h4>
+                    <p>O sistema localiza quem está mais próximo de você na sua comunidade.</p>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">3</div>
+                    <h4>Valorize</h4>
+                    <p>Avalie o serviço e ajude o profissional a crescer e ser visto por mais pessoas.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <section class="cta-section">
+        <h2>Faça parte dessa rede de ajuda!</h2>
+        <p>Seja você um trabalhador ou alguém precisando de um serviço, o AjudaAí é o seu lugar.</p>
+        <a href="cadastro.html" class="btn-white">Criar minha conta grátis</a>
+    </section>
+
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrar - AjudaAí</title>
+    <style>
+        :root {
+            --primary-green: #008060;
+            --light-green: #e6f5f0;
+            --accent-green: #00cc99;
+            --white: #ffffff;
+            --text-dark: #333333;
+            --text-light: #666666;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        body {
+            background-color: var(--light-green);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: var(--white);
+            width: 100%;
+            max-width: 400px;
+            padding: 2.5rem;
+            border-radius: 24px;
+            box-shadow: 0 10px 25px rgba(0, 128, 96, 0.1);
+            text-align: center;
+        }
+
+        .logo-link {
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 1.5rem;
+        }
+
+        .logo-small {
+            color: var(--primary-green);
+            font-family: fantasy;
+            font-size: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+        }
+
+        h2 {
+            color: var(--primary-green);
+            margin-bottom: 0.5rem;
+            font-size: 1.8rem;
+        }
+
+        p {
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            text-align: left;
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 0.9rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #eee;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            border-color: var(--primary-green);
+            background-color: #f9fffb;
+        }
+
+        .forgot-password {
+            display: block;
+            text-align: right;
+            margin-bottom: 2rem;
+            font-size: 0.85rem;
+            color: var(--primary-green);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 16px;
+            background-color: var(--primary-green);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.3s;
+        }
+
+        .btn-login:hover {
+            background-color: var(--accent-green);
+            transform: translateY(-2px);
+        }
+
+        .footer-links {
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .footer-links a {
+            color: var(--primary-green);
+            text-decoration: none;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <a href="index.html" class="logo-link">
+            <div class="logo-small">
+                <span>Ajuda</span><strong>AI</strong>
+            </div>
+        </a>
+
+        <h2>Bem-vindo de volta!</h2>
+        <p>Sentimos sua falta. Entre para continuar.</p>
+
+        <form onsubmit="event.preventDefault(); window.location.href='index.html';">
+            <div class="form-group">
+                <label for="email">E-mail ou WhatsApp</label>
+                <input type="text" id="email" placeholder="Ex: maria@email.com" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Sua Senha</label>
+                <input type="password" id="password" placeholder="Digite sua senha" required>
+            </div>
+
+            <a href="#" class="forgot-password">Esqueceu a senha?</a>
+
+            <button type="submit" class="btn-login">Entrar no sistema</button>
+        </form>
+
+        <div class="footer-links">
+            Ainda não tem conta? <a href="cadastro.html">Cadastre-se grátis</a>
+        </div>
+    </div>
+
+</body>
+</html>
