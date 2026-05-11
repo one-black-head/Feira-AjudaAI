@@ -1,0 +1,85 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Perfil - AjudaAí</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/perfil.css">
+</head>
+<body>
+    <header>
+         <a href="index.html" class="logo"> <img src="image-removebg-preview.png" alt="Logo AjudaAí"> <h1>AjudaAI</h1> </a>
+        <nav> <ul> <li><a href="index.html">Início</a></li> <li><a href="sobre.html">Quem somos?</a></li> <li><a href="dashboard.html">Dashboard</a></li> </ul> </nav>
+        <div class="header-actions" id="header-actions"></div>
+    </header>
+
+    <div id="loading-state" style="text-align: center; padding: 50px; font-size: 1.2rem;">Carregando perfil...</div>
+
+    <main class="profile-container" id="profile-view" style="display: none;">
+        <div class="profile-header">
+            <div class="profile-pic-container"> <img src="" alt="Foto do Perfil" id="profile-pic" class="profile-pic"> </div>
+            <div class="profile-info">
+                <h1 id="user-name">Nome do Usuário</h1>
+                <p id="user-profession">Profissão</p>
+                <div id="user-rating" class="avg-rating" style="display: none;">
+                    <span class="stars">★★★★★</span> <span id="rating-value">5.0 (0 avaliações)</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-grid">
+            <div class="profile-card">
+                <div class="section-header"> <h3>Sobre Mim</h3> </div>
+                <p id="user-summary">Resumo sobre o profissional...</p>
+            </div>
+
+            <div class="profile-card">
+                <div class="section-header"> <h3>Informações de Contato</h3> </div>
+                <div class="info-grid">
+                    <div class="info-item"> <strong>Email:</strong> <span id="user-email"></span> </div>
+                    <div class="info-item"> <strong>Telefone:</strong> <span id="user-phone"></span> </div>
+                    <div class="info-item"> <strong>Endereço:</strong> <span id="user-address"></span> </div>
+                </div>
+            </div>
+            
+            <!-- Seção de Portfólio, visível apenas para workers -->
+            <div class="profile-card" id="portfolio-section" style="display: none;">
+                <div class="section-header"> <h3>Portfólio</h3> <button class="btn btn-outline" id="add-portfolio-btn">+ Adicionar</button> </div>
+                <div id="portfolio-grid"> <!-- Conteúdo do portfólio aqui --> </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/auth-check.js"></script>
+    <script>
+        function onAuthReady(user, userData) {
+            if (!user) { return; } // A verificação de página protegida já é feita no auth-check
+
+            document.getElementById('user-name').textContent = userData.name || 'Nome não informado';
+            document.getElementById('user-email').textContent = userData.email;
+            document.getElementById('user-phone').textContent = userData.telefone || 'Não informado';
+            document.getElementById('user-address').textContent = userData.endereco || 'Não informado';
+            document.getElementById('profile-pic').src = userData.photoURL || 'https://i.pravatar.cc/150'; // Imagem padrão
+
+            if (userData.userType === 'trabalhador') {
+                document.getElementById('user-profession').textContent = userData.profissao || 'Profissão não informada';
+                document.getElementById('user-summary').textContent = userData.resumo_profissao || 'Sem resumo disponível.';
+                document.getElementById('portfolio-section').style.display = 'block';
+                // Adicionar lógica para carregar portfólio aqui
+            } else {
+                document.getElementById('user-profession').textContent = 'Cliente';
+                document.getElementById('user-summary').textContent = 'Usuário da plataforma AjudaAí.';
+            }
+            
+            document.getElementById('loading-state').style.display = 'none';
+            document.getElementById('profile-view').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

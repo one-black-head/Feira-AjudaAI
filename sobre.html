@@ -1,0 +1,83 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quem Somos - AjudaAí</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/sobre.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo">
+            <img src="image-removebg-preview.png" alt="Logo AjudaAí"> 
+            <h1>AjudaAI</h1>
+        </a>
+        <nav>
+            <ul>
+                <li><a href="index.html">Início</a></li>
+                <li><a href="sobre.html">Quem somos?</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+            </ul>
+        </nav>
+        <div class="header-actions" id="header-actions">
+            <!-- Botões de login/logout carregados por auth-check.js -->
+        </div>
+    </header>
+    
+    <section class="about-hero">
+        <h1>Conhecimento a serviço da vida coletiva</h1>
+        <p>O <strong>AjudaAí</strong> nasceu para dar visibilidade aos trabalhadores e facilitar o dia a dia de quem precisa de ajuda rápida e segura. Somos mais que um app: somos uma ferramenta de cidadania.</p>
+    </section>
+
+    <main>
+        <div class="info-grid">
+            <div class="info-card">
+                <h3>🤝 Cidadania na prática</h3>
+                <p>Acreditamos que a tecnologia deve ser para todos. Democratizamos o acesso ao trabalho para quem é autônomo, combatendo a invisibilidade de profissionais incríveis em nossa comunidade.</p>
+            </div>
+            <div class="info-card">
+                <h3>🏘️ Confiança na Comunidade</h3>
+                <p>Fortalecemos a convivência democrática criando uma rede de confiança onde vizinhos ajudam vizinhos com segurança e valorização do saber local e da economia da região.</p>
+            </div>
+            <div class="info-card">
+                <h3>💡 Inovação com Propósito</h3>
+                <p>Usamos a ciência e o design para reduzir desigualdades, colocando ferramentas digitais avançadas nas mãos de quem realmente movimenta a economia com o trabalho manual.</p>
+            </div>
+        </div>
+
+        <section class="how-it-works">
+            <h2>Como funciona?</h2>
+            <div class="steps">
+                <div class="step-item">
+                    <div class="step-number">1</div>
+                    <h4>Peça Ajuda</h4>
+                    <p>Diga qual profissional você precisa (pedreiro, diarista, eletricista, etc.) e nós encontramos para você.</p>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">2</div>
+                    <h4>Encontre Perto de Você</h4>
+                    <p>O sistema localiza os trabalhadores mais próximos, fortalecendo a sua comunidade.</p>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">3</div>
+                    <h4>Contrate e Avalie</h4>
+                    <p>Combine o serviço, e após a conclusão, avalie o profissional para fortalecer a rede de confiança.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <section class="cta-section">
+        <h2>Faça parte dessa rede de ajuda!</h2>
+        <p>Seja você um trabalhador ou alguém precisando de um serviço, o AjudaAí é o seu lugar.</p>
+        <a href="cadastro.html" class="btn-white">Criar minha conta grátis</a>
+    </section>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/auth-check.js"></script>
+</body>
+</html>

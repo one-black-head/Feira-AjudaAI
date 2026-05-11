@@ -1,0 +1,161 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel - AjudaAí</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+    <aside class="sidebar">
+        <a href="index.html" class="logo">AjudaAI</a>
+        <nav>
+            <a href="dashboard.html" class="nav-link active">Início</a>
+            <a href="perfil.html" class="nav-link">Meu Perfil</a>
+            <a href="chat.html" class="nav-link">Mensagens</a>
+            <a href="busca.html" class="nav-link">Buscar</a>
+            <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+            <a href="#" class="nav-link" id="logout-button" style="color: #e74c3c;">Sair</a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="top-bar">
+            <h2 id="user-greeting">Olá!</h2>
+            <div id="profile-toggle" class="profile-toggle" style="display: none;">
+                <div id="view-worker" class="toggle-option">Sou Prestador</div>
+                <div id="view-client" class="toggle-option">Sou Cliente</div>
+            </div>
+        </header>
+
+        <div id="loading-state">Carregando seus dados...</div>
+
+        <!-- Painel do Prestador (Worker) -->
+        <div id="worker-dashboard" class="hidden">
+            <div class="stats-grid">
+                <div class="stat-card"><h4>Ganhos do Mês</h4><p id="worker-earnings">R$ 0,00</p></div>
+                <div class="stat-card"><h4>Serviços Feitos</h4><p id="worker-jobs-done">0</p></div>
+                <div class="stat-card"><h4>Avaliação</h4><p id="worker-rating">N/A ★</p></div>
+            </div>
+            <div class="data-card">
+                <h3>Últimas Solicitações de Serviço</h3>
+                <div id="worker-requests-list"><p>Nenhuma solicitação encontrada.</p></div>
+            </div>
+        </div>
+
+        <!-- Painel do Cliente -->
+        <div id="client-dashboard" class="hidden">
+            <div class="stats-grid">
+                <div class="stat-card"><h4>Gastos do Mês</h4><p id="client-spending">R$ 0,00</p></div>
+                <div class="stat-card"><h4>Contratações</h4><p id="client-hires">0</p></div>
+            </div>
+            <div class="data-card">
+                <h3>Meus Pedidos de Ajuda</h3>
+                <div id="client-requests-list"><p>Nenhum pedido realizado ainda.</p></div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/auth-check.js"></script>
+
+    <script>
+        const db = firebase.firestore();
+
+        function formatCurrency(value) {
+            return `R$ ${value.toFixed(2).replace('.', ',')}`;
+        }
+
+        function renderServiceItem(item, listElement) {
+            const div = document.createElement('div');
+            div.className = 'order-item';
+            
+            const statusBadge = item.status === 'concluido' 
+                ? `<span class="badge badge-done">Concluído</span>`
+                : `<span class="badge badge-pending">${item.status}</span>`;
+
+            div.innerHTML = `
+                <div>
+                    <strong>${item.serviceName}</strong><br>
+                    <small>${item.customerName || item.workerName}</small>
+                </div>
+                ${statusBadge}
+            `;
+            listElement.appendChild(div);
+        }
+
+        async function loadWorkerData(uid) {
+            const jobsRef = db.collection('jobs').where('workerId', '==', uid);
+            const snapshot = await jobsRef.get();
+            
+            let earnings = 0;
+            let jobsDone = 0;
+            const list = document.getElementById('worker-requests-list');
+            list.innerHTML = ''; // Limpa a lista
+
+            snapshot.forEach(doc => {
+                const job = doc.data();
+                if (job.status === 'concluido') {
+                    earnings += job.price;
+                    jobsDone++;
+                }
+                renderServiceItem({ ...job, serviceName: job.description }, list);
+            });
+            
+            if(snapshot.empty) list.innerHTML = '<p>Nenhuma solicitação encontrada.</p>';
+            document.getElementById('worker-earnings').textContent = formatCurrency(earnings);
+            document.getElementById('worker-jobs-done').textContent = jobsDone;
+        }
+
+        async function loadClientData(uid) {
+            const hiresRef = db.collection('jobs').where('customerId', '==', uid);
+            const snapshot = await hiresRef.get();
+
+            let spending = 0;
+            let hires = 0;
+            const list = document.getElementById('client-requests-list');
+            list.innerHTML = ''; // Limpa a lista
+
+            snapshot.forEach(doc => {
+                const job = doc.data();
+                spending += job.price;
+                hires++;
+                renderServiceItem({ ...job, serviceName: job.description }, list);
+            });
+
+            if(snapshot.empty) list.innerHTML = '<p>Nenhum pedido realizado ainda.</p>';
+            document.getElementById('client-spending').textContent = formatCurrency(spending);
+            document.getElementById('client-hires').textContent = hires;
+        }
+
+        function setupDashboard(user, userData) {
+            document.getElementById('loading-state').style.display = 'none';
+            document.getElementById('user-greeting').textContent = `Olá, ${userData.name.split(' ')[0]}!`;
+
+            const workerView = document.getElementById('worker-dashboard');
+            const clientView = document.getElementById('client-dashboard');
+            
+            // Decide qual painel mostrar
+            if (userData.userType === 'trabalhador') {
+                workerView.classList.remove('hidden');
+                loadWorkerData(user.uid);
+            } else {
+                clientView.classList.remove('hidden');
+                loadClientData(user.uid);
+            }
+        }
+
+        function onAuthReady(user, userData) {
+             if (user) {
+                setupDashboard(user, userData);
+             }
+        }
+    </script>
+</body>
+</html>

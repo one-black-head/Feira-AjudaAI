@@ -1,0 +1,104 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AjudaAí - Encontre profissionais pertinho de você</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/index.css">
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo">
+            <img src="image-removebg-preview.png" alt="Logo AjudaAí">
+            <h1>AjudaAI</h1>
+        </a>
+        
+        <nav>
+            <ul>
+                <li><a href="index.html">Início</a></li>
+                <li><a href="sobre.html">Quem somos?</a></li>
+                <li><a href="dashboard.html">Dashboard</a></li>
+            </ul>
+        </nav>
+        <div class="header-actions" id="header-actions">
+            <!-- Botões de login/logout carregados por auth-check.js -->
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-text">
+                <h1>Precisando de um profissional?</h1>
+                <p>Encontre ajudantes diários pertinho de você.</p>
+                <div class="hero-buttons">
+                    <a href="busca.html" class="btn btn-solid">Preciso de ajuda agora</a>
+                    <a href="busca.html" class="btn btn-outline">Buscar Trabalhadores</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="placeholder-map">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6674.591230056024!2d-38.62392800934293!3d-5.892707554105633!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x7bb58c51eff9361%3A0x3972549b392fb28f!2sJaguaribe%2C%20CE%2C%2063475-000!5e0!3m2!1spt-BR!2sbr!4v1774358316935!5m2!1spt-BR!2sbr" 
+                        width="100%" 
+                        height="100%" 
+                        style="border: 0; border-radius: 40px;" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </section>
+
+        <section class="top-workers">
+            <h2 class="section-title">Top Trabalhadores do Mês</h2>
+            <div class="podium">
+                <div class="worker-card">
+                    <div class="medal">🥈</div>
+                    <h3>Ana Silva</h3>
+                    <p>Diarista</p>
+                </div>
+
+                <div class="worker-card first-place">
+                    <div class="medal">🥇</div>
+                    <h3>Carlos Souza</h3>
+                    <p>Pedreiro</p>
+                </div>
+
+                <div class="worker-card">
+                    <div class="medal">🥉</div>
+                    <h3>João Pereira</h3>
+                    <p>Eletricista</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="categories">
+            <h2 class="section-title">Encontre trabalhadores por categoria</h2>
+            <div class="categories-grid">
+                <div class="category-tag" onclick="location.href='busca.html?q=babá'">Babá</div>
+                <div class="category-tag" onclick="location.href='busca.html?q=diarista'">Diarista</div>
+                <div class="category-tag" onclick="location.href='busca.html?q=pedreiro'">Pedreiro</div>
+                <div class="category-tag" onclick="location.href='busca.html?q=eletricista'">Eletricista</div>
+                <div class="category-tag" onclick="location.href='busca.html?q=encanador'">Encanador</div>
+                <div class="category-tag" onclick="location.href='busca.html?q=montador'">Montador</div>
+                <div class="category-tag" onclick="location.href='busca.html?q=outros'">Outros</div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 AjudaAí - Todos os direitos reservados</p>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/auth-check.js"></script>
+
+</body>
+</html>
