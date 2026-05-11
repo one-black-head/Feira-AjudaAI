@@ -1,0 +1,161 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat - AjudaAí</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/chat.css">
+</head>
+<body>
+    <div class="chat-container" id="chat-app" style="display:none;">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h3>Conversas</h3>
+            </div>
+            <div class="user-list" id="user-list"></div>
+        </div>
+        <div class="chat-window">
+            <div class="chat-header" id="chat-header">Selecione uma conversa</div>
+            <div class="messages" id="messages"></div>
+            <form class="message-form" id="message-form" style="visibility: hidden;">
+                <input type="text" id="message-input" placeholder="Digite sua mensagem..." autocomplete="off">
+                <button type="submit" id="send-button">→</button>
+            </form>
+        </div>
+    </div>
+    <div id="loading-state">Carregando chat...</div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/auth-check.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const db = firebase.firestore();
+            const auth = firebase.auth();
+            let currentUserId = null;
+            let currentUserData = null;
+            let chattingWithId = null;
+            let unsubscribeMessages = null;
+            const userList = document.getElementById('user-list');
+
+            auth.onAuthStateChanged(user => {
+                if (user) {
+                    currentUserId = user.uid;
+                    db.collection('users').doc(currentUserId).get().then(doc => {
+                        if (doc.exists) {
+                            currentUserData = doc.data();
+                            loadUserList();
+                            document.getElementById('chat-app').style.display = 'flex';
+                            document.getElementById('loading-state').style.display = 'none';
+                        }
+                    });
+                } else {
+                    window.location.href = 'login.html';
+                }
+            });
+
+            function loadUserList() {
+                // Definir a coleção a ser consultada com base no tipo de usuário
+                let query = db.collection('users');
+
+                // Se for cliente, lista trabalhadores com quem já tem chat
+                // Se for trabalhador, lista clientes com quem já tem chat
+                // Esta é uma lógica simplificada. Uma app real teria uma lista de contatos.
+                query.get().then(snapshot => {
+                    userList.innerHTML = '';
+                    snapshot.forEach(doc => {
+                        const userData = doc.data();
+                        const userId = doc.id;
+
+                        // Não se liste
+                        if (userId === currentUserId) return;
+
+                        // Lógica de exibição simplificada: Clientes veem trabalhadores e vice-versa
+                        if (currentUserData.userType === 'cliente' && userData.userType !== 'trabalhador') {
+                           return; 
+                        }
+                        if (currentUserData.userType === 'trabalhador' && userData.userType !== 'cliente'){
+                            return;
+                        }
+
+                        const photoSrc = userData.photoURL || `https://i.pravatar.cc/150?u=${userId}`;
+                        const userElement = document.createElement('div');
+                        userElement.className = 'user-item';
+                        userElement.dataset.id = userId;
+                        userElement.dataset.name = userData.name;
+                        userElement.innerHTML = `<img src="${photoSrc}" alt="${userData.name}" class="user-pic"> <div class="user-name">${userData.name}</div>`;
+                        userList.appendChild(userElement);
+                    });
+                });
+            }
+
+            userList.addEventListener('click', (e) => {
+                const target = e.target.closest('.user-item');
+                if (!target) return;
+
+                chattingWithId = target.dataset.id;
+                if(document.querySelector('.user-item.active')) {
+                    document.querySelector('.user-item.active').classList.remove('active');
+                }
+                target.classList.add('active');
+
+                document.getElementById('chat-header').textContent = `Conversando com ${target.dataset.name}`;
+                document.getElementById('message-form').style.visibility = 'visible';
+                document.getElementById('messages').innerHTML = '';
+
+                if (unsubscribeMessages) unsubscribeMessages();
+                
+                const chatId = [currentUserId, chattingWithId].sort().join('_');
+                const messagesRef = db.collection('chats').doc(chatId).collection('messages').orderBy('timestamp', 'asc');
+                
+                unsubscribeMessages = messagesRef.onSnapshot(snapshot => {
+                    snapshot.docChanges().forEach(change => {
+                        if (change.type === 'added') {
+                            const msg = change.doc.data();
+                            displayMessage(msg.senderId === currentUserId, msg.text);
+                        }
+                    });
+                });
+            });
+
+            function displayMessage(isSent, text) {
+                const messagesDiv = document.getElementById('messages');
+                const msgEl = document.createElement('div');
+                msgEl.classList.add('message', isSent ? 'sent' : 'received');
+                msgEl.textContent = text;
+                messagesDiv.appendChild(msgEl);
+                messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            }
+
+            document.getElementById('message-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const input = document.getElementById('message-input');
+                const text = input.value.trim();
+                if (!text || !chattingWithId) return;
+
+                const chatId = [currentUserId, chattingWithId].sort().join('_');
+
+                // Adiciona a mensagem à subcoleção
+                db.collection('chats').doc(chatId).collection('messages').add({
+                    text: text,
+                    senderId: currentUserId,
+                    receiverId: chattingWithId,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                // Cria ou atualiza o documento do chat para ter metadados (opcional)
+                 db.collection('chats').doc(chatId).set({
+                    lastUpdate: firebase.firestore.FieldValue.serverTimestamp(),
+                    participants: [currentUserId, chattingWithId]
+                }, { merge: true });
+
+                input.value = '';
+            });
+        });
+    </script>
+</body>
+</html>

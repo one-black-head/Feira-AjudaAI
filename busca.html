@@ -1,0 +1,102 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar Profissionais - AjudaAí</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/busca.css">
+</head>
+<body>
+    <div class="search-container">
+        <div class="search-header">
+            <h1>Encontre o Profissional Ideal</h1>
+        </div>
+        <input type="text" id="search-input" placeholder="Buscar por nome...">
+        <div class="category-filters" id="category-filters">
+            <div class="category-tag active" data-category="all">Todos</div>
+        </div>
+        <div class="results-grid" id="results-grid"></div>
+        <div id="no-results">
+            <p>Nenhum profissional encontrado.</p>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const db = firebase.firestore();
+            const resultsGrid = document.getElementById('results-grid');
+            const noResults = document.getElementById('no-results');
+            const searchInput = document.getElementById('search-input');
+            const categoryFilters = document.getElementById('category-filters');
+            let workers = [];
+
+            db.collection('users').where('userType', '==', 'trabalhador').get().then(snapshot => {
+                const categories = new Set();
+                snapshot.forEach(doc => {
+                    const worker = {
+                        id: doc.id,
+                        ...doc.data()
+                    };
+                    workers.push(worker);
+                    if (worker.profissao) categories.add(worker.profissao);
+                });
+                renderWorkers(workers);
+                populateCategories(categories);
+            });
+
+            function populateCategories(categories) {
+                categories.forEach(cat => {
+                    const tag = document.createElement('div');
+                    tag.className = 'category-tag';
+                    tag.dataset.category = cat;
+                    tag.textContent = cat;
+                    categoryFilters.appendChild(tag);
+                });
+            }
+
+            function renderWorkers(workersToRender) {
+                resultsGrid.innerHTML = '';
+                noResults.style.display = workersToRender.length === 0 ? 'block' : 'none';
+
+                workersToRender.forEach(worker => {
+                    const photoSrc = worker.photoURL || `https://i.pravatar.cc/150?u=${worker.id}`;
+                    const card = document.createElement('div');
+                    card.className = 'worker-card';
+                    card.innerHTML = `
+                        <img src="${photoSrc}" alt="Foto de ${worker.name}" class="worker-pic">
+                        <h3>${worker.name}</h3>
+                        <p>${worker.profissao || 'Sem categoria'}</p>
+                        <a href="perfil.html?uid=${worker.id}" class="btn">Ver Perfil</a>
+                    `;
+                    resultsGrid.appendChild(card);
+                });
+            }
+
+            function filterAndRender() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const activeCategory = document.querySelector('.category-tag.active').dataset.category;
+
+                const filteredWorkers = workers.filter(w =>
+                    w.name.toLowerCase().includes(searchTerm) &&
+                    (activeCategory === 'all' || w.profissao === activeCategory)
+                );
+                renderWorkers(filteredWorkers);
+            }
+
+            searchInput.addEventListener('keyup', filterAndRender);
+            categoryFilters.addEventListener('click', (e) => {
+                if (e.target.classList.contains('category-tag')) {
+                    document.querySelector('.category-tag.active').classList.remove('active');
+                    e.target.classList.add('active');
+                    filterAndRender();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

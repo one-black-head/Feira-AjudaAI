@@ -4,126 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro - AjudaAí</title>
-    <style>
-        :root {
-            --primary-green: #008060;
-            --light-green: #e6f5f0;
-            --accent-green: #00cc99;
-            --white: #ffffff;
-            --text-dark: #333333;
-            --text-light: #666666;
-            --border-color: #ddd;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
-
-        body {
-            background-color: var(--light-green);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .auth-card {
-            background: var(--white);
-            width: 100%;
-            max-width: 500px;
-            padding: 2rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-        }
-
-        .header { text-align: center; margin-bottom: 1.5rem; }
-        .logo { color: var(--primary-green); font-size: 28px; font-weight: bold; margin-bottom: 5px; display: block; text-decoration: none; font-family: fantasy; }
-        
-        h2 { color: var(--text-dark); font-size: 1.5rem; margin-bottom: 5px; }
-        p { color: var(--text-light); font-size: 0.9rem; }
-
-        .type-selector {
-    display: flex; /* Mudamos de grid para flex */
-    gap: 10px;
-    margin: 20px 0;
-    width: 100%;
-}
-
-    .type-option {
-        flex: 1; /* Isso obriga os dois botões a terem o mesmo tamanho exato */
-        padding: 12px;
-        border: 2px solid #eee;
-        border-radius: 12px;
-        text-align: center;
-        cursor: pointer;
-        font-weight: 600;
-        transition: 0.3s;
-        color: var(--text-light);
-        white-space: nowrap; /* Impede que o texto quebre linha dentro do botão */
-    }
-
-        .type-option.active {
-            border-color: var(--primary-green);
-            background-color: var(--light-green);
-            color: var(--primary-green);
-        }
-
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .full-width { grid-column: span 2; }
-        .form-group { margin-bottom: 15px; }
-
-        label { display: block; margin-bottom: 6px; font-size: 0.85rem; font-weight: 600; color: var(--text-dark); }
-
-        input, select, textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1.5px solid var(--border-color);
-            border-radius: 10px;
-            outline: none;
-            font-size: 14px;
-            transition: 0.3s;
-        }
-
-        input:focus, select:focus, textarea:focus { 
-            border-color: var(--primary-green);
-            box-shadow: 0 0 0 3px rgba(0, 128, 96, 0.1);
-        }
-
-        textarea { resize: none; height: 90px; }
-
-        .btn-submit {
-            width: 100%;
-            padding: 16px;
-            background: var(--primary-green);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 15px;
-            transition: 0.3s;
-        }
-
-        .btn-submit:hover { background: var(--accent-green); transform: translateY(-2px); }
-
-        .footer { text-align: center; margin-top: 20px; font-size: 0.85rem; color: var(--text-light); }
-        .footer a { color: var(--primary-green); text-decoration: none; font-weight: bold; }
-
-        /* Animação suave para os campos de ajudante */
-        #campos-ajudante {
-            transition: all 0.4s ease;
-            overflow: hidden;
-            border-top: 1px solid #eee;
-            padding-top: 15px;
-            margin-top: 10px;
-        }
-    </style>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/cadastro.css">
 </head>
 <body>
 
     <div class="auth-card">
         <div class="header">
-            <a href="index.html" class="logo">AjudaAI</a>
+            <a href="index.html" class="logo"><img src="image-removebg-preview.png" alt=""></a>
             <h2>Crie sua conta</h2>
             <p>Escolha como deseja interagir na plataforma</p>
         </div>
@@ -171,9 +59,31 @@
                                 <option value="outros">Outros</option>
                             </select>
                         </div>
+                        <div class="form-group full-width" id="campo-outra-categoria" style="display: none;">
+                            <label for="outra-categoria">Especifique sua especialidade</label>
+                            <input type="text" id="outra-categoria" placeholder="Digite sua profissão...">
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="profile-pic">Foto de Perfil</label>
+                            <input type="file" id="profile-pic" accept="image/*">
+                            <small>Formatos: JPG ou PNG. Preferência 1:1.</small>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="resume">Currículo Profissional (PDF)</label>
+                            <input type="file" id="resume" accept=".pdf">
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="certifications">Certificados/Cursos</label>
+                            <input type="file" id="certifications" accept="image/*,.pdf" multiple>
+                            <span class="helper-text">Pode selecionar vários arquivos de uma vez.</span>
+                        </div>
+
                         <div class="form-group full-width">
                             <label for="bio">Resumo Profissional (Bio)</label>
-                            <textarea id="bio" placeholder="Conte um pouco sobre sua experiência e serviços..."></textarea>
+                            <textarea id="bio" placeholder="Conte um pouco sobre sua experiência..."></textarea>
                         </div>
                     </div>
                 </div>
@@ -193,7 +103,20 @@
     </div>
 
     <script>
-        // Função para alternar entre tipos de conta
+        // Mostrar/Esconder campo "Outros" na Especialidade
+        document.getElementById('categoria').addEventListener('change', function() {
+            const campoOutros = document.getElementById('campo-outra-categoria');
+            const inputOutros = document.getElementById('outra-categoria');
+            
+            if (this.value === 'outros') {
+                campoOutros.style.display = 'block';
+                inputOutros.required = true; // Torna obrigatório se aparecer
+            } else {
+                campoOutros.style.display = 'none';
+                inputOutros.required = false;
+                inputOutros.value = ''; // Limpa o campo se o usuário mudar de ideia
+            }
+        });
         function selectType(tipo) {
             const btnAjudar = document.getElementById('btn-ajudar');
             const btnContratar = document.getElementById('btn-contratar');
@@ -203,46 +126,40 @@
                 btnAjudar.classList.add('active');
                 btnContratar.classList.remove('active');
                 camposAjudante.style.display = 'block';
-                
                 document.getElementById('cep').required = true;
                 document.getElementById('categoria').required = true;
             } else {
                 btnContratar.classList.add('active');
                 btnAjudar.classList.remove('active');
                 camposAjudante.style.display = 'none';
-                
                 document.getElementById('cep').required = false;
                 document.getElementById('categoria').required = false;
             }
         }
 
-        // MÁSCARAS DE INPUT
-        // Máscara para WhatsApp
+        // Máscaras permanecem iguais
         document.getElementById('whatsapp').addEventListener('input', function(e) {
             let x = e.target.value.replace(/\D/g, '').match(/(\d{0,2})(\d{0,5})(\d{0,4})/);
             e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
         });
 
-        // Máscara para CPF
         document.getElementById('cpf').addEventListener('input', function(e) {
             let v = e.target.value.replace(/\D/g, '');
             v = v.replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d{1,2})$/, "$1-$2");
             e.target.value = v;
         });
 
-        // Máscara para CEP
         document.getElementById('cep').addEventListener('input', function(e) {
             let v = e.target.value.replace(/\D/g, '');
             v = v.replace(/^(\d{5})(\d)/, "$1-$2");
             e.target.value = v;
         });
 
-        // Submit do formulário
         document.getElementById('cadastroForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const tipo = document.querySelector('.type-option.active').innerText;
             alert('Sucesso!\nSeu cadastro como ' + tipo + ' foi recebido.\n\nBem-vindo(a) ao AjudaAí!');
-            window.location.href = 'index.html'; // Redireciona para home após o OK
+            window.location.href = 'index.html';
         });
     </script>
 </body>
