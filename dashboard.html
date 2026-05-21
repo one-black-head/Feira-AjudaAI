@@ -59,6 +59,32 @@
         </div>
     </main>
 
+    <!-- Modal de Avaliação -->
+    <div id="review-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Avaliar Serviço</h2>
+            <form id="review-form">
+                <div class="form-group">
+                    <label>Nota (de 1 a 5 estrelas):</label>
+                    <div class="star-rating">
+                        <span class="star" data-value="1">★</span>
+                        <span class="star" data-value="2">★</span>
+                        <span class="star" data-value="3">★</span>
+                        <span class="star" data-value="4">★</span>
+                        <span class="star" data-value="5">★</span>
+                    </div>
+                    <input type="hidden" id="rating-input" value="0">
+                </div>
+                <div class="form-group">
+                    <label for="review-comment">Comentário:</label>
+                    <textarea id="review-comment" rows="4"></textarea>
+                </div>
+                <button type="submit" class="btn-submit">Enviar Avaliação</button>
+            </form>
+        </div>
+    </div>
+
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
@@ -80,12 +106,20 @@
                 ? `<span class="badge badge-done">Concluído</span>`
                 : `<span class="badge badge-pending">${item.status}</span>`;
 
+            let reviewButton = '';
+            if (item.status === 'concluido') {
+                reviewButton = `<button class="btn-review" data-job-id="${item.id}" data-worker-id="${item.workerId}">Avaliar</button>`;
+            }
+
             div.innerHTML = `
                 <div>
                     <strong>${item.serviceName}</strong><br>
                     <small>${item.customerName || item.workerName}</small>
                 </div>
-                ${statusBadge}
+                <div class="order-item-right">
+                    ${statusBadge}
+                    ${reviewButton}
+                </div>
             `;
             listElement.appendChild(div);
         }
@@ -105,7 +139,7 @@
                     earnings += job.price;
                     jobsDone++;
                 }
-                renderServiceItem({ ...job, serviceName: job.description }, list);
+                renderServiceItem({ ...job, id: doc.id, serviceName: job.description }, list);
             });
             
             if(snapshot.empty) list.innerHTML = '<p>Nenhuma solicitação encontrada.</p>';
@@ -126,7 +160,7 @@
                 const job = doc.data();
                 spending += job.price;
                 hires++;
-                renderServiceItem({ ...job, serviceName: job.description }, list);
+                renderServiceItem({ ...job, id: doc.id, serviceName: job.description }, list);
             });
 
             if(snapshot.empty) list.innerHTML = '<p>Nenhum pedido realizado ainda.</p>';

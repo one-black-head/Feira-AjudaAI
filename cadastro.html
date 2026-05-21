@@ -6,8 +6,19 @@
     <title>Cadastro - AjudaAí</title>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/cadastro.css">
+    <style>
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            text-decoration: none;
+            color: #333;
+            font-size: 16px;
+        }
+    </style>
 </head>
 <body>
+    <a href="index.html" class="back-button">Voltar</a>
 
     <div class="auth-card">
         <div class="header">
@@ -102,6 +113,11 @@
         </div>
     </div>
 
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="js/firebase-config.js"></script>
+
     <script>
         // Mostrar/Esconder campo "Outros" na Especialidade
         document.getElementById('categoria').addEventListener('change', function() {
@@ -155,11 +171,62 @@
             e.target.value = v;
         });
 
-        document.getElementById('cadastroForm').addEventListener('submit', function(e) {
+        document.getElementById('cadastroForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            const tipo = document.querySelector('.type-option.active').innerText;
-            alert('Sucesso!\nSeu cadastro como ' + tipo + ' foi recebido.\n\nBem-vindo(a) ao AjudaAí!');
-            window.location.href = 'index.html';
+            
+            const auth = firebase.auth();
+            const db = firebase.firestore();
+
+            const userTypeOption = document.querySelector('.type-option.active').id;
+            const userType = userTypeOption === 'btn-ajudar' ? 'trabalhador' : 'cliente';
+            
+            const name = document.getElementById('nome').value;
+            const cpf = document.getElementById('cpf').value;
+            const whatsapp = document.getElementById('whatsapp').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('senha').value;
+            
+            const cep = document.getElementById('cep').value;
+            let categoria = document.getElementById('categoria').value;
+            if (categoria === 'outros') {
+                categoria = document.getElementById('outra-categoria').value;
+            }
+            const bio = document.getElementById('bio').value;
+
+            try {
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+
+                const userData = {
+                    name: name,
+                    cpf: cpf,
+                    whatsapp: whatsapp,
+                    email: email,
+                    userType: userType,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+
+                if (userType === 'trabalhador') {
+                    userData.cep = cep;
+                    userData.profissao = categoria;
+                    userData.resumo_profissao = bio;
+                }
+
+                await db.collection('users').doc(user.uid).set(userData);
+
+                alert('Sucesso!\nSeu cadastro foi realizado.\n\nBem-vindo(a) ao AjudaAí!');
+                window.location.href = 'dashboard.html';
+
+            } catch (error) {
+                console.error("Erro no cadastro: ", error);
+                let message = "Ocorreu um erro ao realizar o cadastro. Por favor, tente novamente.";
+                if (error.code === 'auth/email-already-in-use') {
+                    message = "Este e-mail já está em uso. Por favor, utilize outro e-mail ou faça login.";
+                } else if (error.code === 'auth/weak-password') {
+                    message = "A senha é muito fraca. Ela deve ter no mínimo 6 caracteres.";
+                }
+                alert("Erro: " + message);
+            }
         });
     </script>
 </body>
