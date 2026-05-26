@@ -1,0 +1,168 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Perfil - AjudaAí</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/editar-perfil.css">
+    <link rel="stylesheet" href="css/custom-toast.css"> <!-- CSS do Toast -->
+    <link rel="icon" href="image-removebg-preview.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+</head>
+<body>
+    <div id="loader" class="loader"><p>Carregando dados do perfil...</p></div>
+
+    <main class="form-container" id="form-container" style="display: none;">
+        <header class="form-header">
+            <h1>Editar Perfil</h1>
+            <a href="javascript:history.back()" class="back-link" title="Voltar">×</a>
+        </header>
+
+        <form id="edit-profile-form" class="form-body">
+            <section class="profile-pic-section">
+                <img src="https://i.imgur.com/TIGBwAm.jpg" alt="Foto de Perfil" id="profile-pic-preview">
+                <div class="profile-pic-uploader">
+                    <label for="profile-pic-upload" class="btn btn-outline">Trocar Foto</label>
+                    <input type="file" id="profile-pic-upload" accept="image/*" style="display: none;">
+                    <p id="upload-status">Tamanho recomendado: 300x300 pixels.</p>
+                </div>
+            </section>
+            <hr>
+            <section>
+                <h2 class="form-section-title">Informações Pessoais</h2>
+                <div class="form-grid">
+                    <div class="form-group"> <label for="name">Nome Completo</label> <input type="text" id="name" required> </div>
+                    <div class="form-group"> <label for="email">Email</label> <input type="email" id="email" disabled> </div>
+                    <div class="form-group"> <label for="cpf">CPF</label> <input type="text" id="cpf" placeholder="000.000.000-00"> </div>
+                    <div class="form-group"> <label for="whatsapp">WhatsApp</label> <input type="tel" id="whatsapp" placeholder="(00) 90000-0000"> </div>
+                </div>
+            </section>
+            <div id="worker-fields" style="display: none;">
+                <hr>
+                <section>
+                    <h2 class="form-section-title">Informações Profissionais</h2>
+                    <div class="form-grid">
+                        <div class="form-group"> <label for="profession">Profissão</label> <input type="text" id="profession"> </div>
+                        <div class="form-group"> <label for="cep">CEP</label> <input type="text" id="cep" placeholder="00000-000"> </div>
+                        <div class="form-group"> <label for="priceMin">Preço Mín (R$)</label> <input type="number" id="priceMin" step="0.01"> </div>
+                        <div class="form-group"> <label for="priceMax">Preço Máx (R$)</label> <input type="number" id="priceMax" step="0.01"> </div>
+                        <div class="form-group full-width"> <label for="bio">Resumo Profissional</label> <textarea id="bio" rows="4"></textarea> </div>
+                    </div>
+                </section>
+            </div>
+            <footer class="form-actions">
+                <button type="button" id="cancel-btn" class="btn btn-outline">Cancelar</button>
+                <button type="submit" id="save-btn" class="btn btn-solid">Salvar Alterações</button>
+            </footer>
+        </form>
+    </main>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/auth-check.js"></script>
+    <script src="js/custom-toast.js"></script> <!-- JS do Toast -->
+
+    <script>
+        const db = firebase.firestore();
+        const storage = firebase.storage();
+        let currentUser, currentUserData, isWorker, newPicFile = null;
+
+        const form = document.getElementById('edit-profile-form');
+        const picPreview = document.getElementById('profile-pic-preview');
+        const picUploadInput = document.getElementById('profile-pic-upload');
+        const uploadStatus = document.getElementById('upload-status');
+        const saveBtn = document.getElementById('save-btn');
+        const loader = document.getElementById('loader');
+        const formContainer = document.getElementById('form-container');
+        
+        const fields = { name: document.getElementById('name'), email: document.getElementById('email'), cpf: document.getElementById('cpf'), whatsapp: document.getElementById('whatsapp'), profession: document.getElementById('profession'), cep: document.getElementById('cep'), priceMin: document.getElementById('priceMin'), priceMax: document.getElementById('priceMax'), bio: document.getElementById('bio') };
+
+        function onAuthReady(user, userData) {
+            if (!user || !userData) { window.location.href = 'login.html'; return; }
+            
+            currentUser = user; currentUserData = userData;
+            isWorker = ['trabalhador', 'ajudante', 'lojista'].includes(currentUserData.userType);
+
+            picPreview.src = currentUserData.photoURL || 'https://i.imgur.com/TIGBwAm.jpg';
+            fields.name.value = currentUserData.name || '';
+            fields.email.value = currentUser.email;
+            fields.cpf.value = currentUserData.cpf || '';
+            fields.whatsapp.value = currentUserData.whatsapp || '';
+
+            if (isWorker) {
+                document.getElementById('worker-fields').style.display = 'block';
+                fields.profession.value = currentUserData.profession || '';
+                fields.cep.value = currentUserData.cep || '';
+                fields.bio.value = currentUserData.bio || '';
+                fields.priceMin.value = currentUserData.priceMin || '';
+                fields.priceMax.value = currentUserData.priceMax || '';
+            }
+            
+            loader.style.display = 'none';
+            formContainer.style.display = 'block';
+        }
+
+        picUploadInput.addEventListener('change', e => {
+            newPicFile = e.target.files[0];
+            if (newPicFile) {
+                const reader = new FileReader();
+                reader.onload = evt => { picPreview.src = evt.target.result; };
+                reader.readAsDataURL(newPicFile);
+                uploadStatus.textContent = `Arquivo: ${newPicFile.name}`;
+            }
+        });
+
+        form.addEventListener('submit', (e) => { e.preventDefault(); saveProfileChanges(); });
+
+        async function saveProfileChanges() {
+            saveBtn.disabled = true; saveBtn.textContent = 'Salvando...';
+
+            try {
+                let newPhotoURL = currentUserData.photoURL;
+
+                if (newPicFile) {
+                    uploadStatus.textContent = 'Enviando foto...';
+                    const photoRef = storage.ref(`users/${currentUser.uid}/profile_${Date.now()}_${newPicFile.name}`);
+                    const snap = await photoRef.put(newPicFile);
+                    newPhotoURL = await snap.ref.getDownloadURL();
+                }
+
+                const updatePayload = {
+                    name: fields.name.value.trim(),
+                    cpf: fields.cpf.value.trim(),
+                    whatsapp: fields.whatsapp.value.trim(),
+                    photoURL: newPhotoURL,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                };
+                if (isWorker) {
+                    updatePayload.profession = fields.profession.value.trim();
+                    updatePayload.cep = fields.cep.value.trim();
+                    updatePayload.bio = fields.bio.value.trim();
+                    updatePayload.priceMin = fields.priceMin.value ? parseFloat(fields.priceMin.value) : null;
+                    updatePayload.priceMax = fields.priceMax.value ? parseFloat(fields.priceMax.value) : null;
+                }
+
+                await db.collection('users').doc(currentUser.uid).update(updatePayload);
+                
+                showToast('Perfil atualizado com sucesso!', 'success'); // <-- SUBSTITUIÇÃO
+                setTimeout(() => { window.location.href = `perfil.html?id=${currentUser.uid}`; }, 1500);
+
+            } catch (error) {
+                console.error("Erro ao atualizar perfil:", error);
+                showToast(`Erro ao atualizar: ${error.message}`, 'error'); // <-- SUBSTITUIÇÃO
+                saveBtn.disabled = false; saveBtn.textContent = 'Salvar Alterações';
+                uploadStatus.textContent = 'Falha no envio.';
+            }
+        }
+        
+        document.getElementById('cancel-btn').addEventListener('click', () => { window.history.back(); });
+    </script>
+    <script src="js/ai-chat.js"></script>
+</body>
+</html>

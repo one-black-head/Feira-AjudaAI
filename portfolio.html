@@ -1,0 +1,50 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Portfólio - AjudaAí</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/portfolio.css">
+    <link rel="icon" href="image-removebg-preview.png" type="image/png">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo"> <img src="image-removebg-preview.png" alt="Logo AjudaAí"> <h1>AjudaAI</h1> </a>
+        <nav> <ul> <li><a href="index.html">Início</a></li> <li><a href="sobre.html">Quem somos?</a></li> <li><a href="busca.html">Profissionais</a></li> <li><a href="chat.html">Chat</a></li> </ul> </nav>
+        <div class="header-actions" id="header-actions"></div>
+    </header>
+
+    <main class="container">
+        <section class="upload-card animate-on-scroll">
+            <form id="upload-form">
+                <h3>Adicionar Novo Trabalho</h3>
+                <div class="form-grid">
+                    <div class="form-group"><input type="text" id="item-title" placeholder="Título do Trabalho" required></div>
+                    <div class="form-group"><input type="file" id="item-file" accept="image/*,application/pdf" required></div>
+                    <div class="form-group"><textarea id="item-description" placeholder="Descrição breve do trabalho..." required></textarea></div>
+                </div>
+                <button type="submit" class="btn btn-solid" id="upload-btn">Adicionar ao Portfólio</button>
+            </form>
+        </section>
+
+        <div id="loading-state" class="loading animate-on-scroll">Carregando seu portfólio...</div>
+        <p id="no-items-msg" class="animate-on-scroll" style="display:none;">Seu portfólio está vazio. Adicione seu primeiro trabalho acima!</p>
+        
+        <section id="portfolio-grid" class="animate-on-scroll"></section>
+    </main>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/auth-check.js"></script>
+    <script src="js/portfolio-script.js"></script>
+    <script src="js/animations.js"></script>
+</body>
+</html>
